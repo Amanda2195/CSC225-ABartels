@@ -1,0 +1,138 @@
+Microsoft (R) Macro Assembler Version 14.26.28806.0	    11/01/21 19:25:10
+main.asm						     Page 1 - 1
+
+
+				.386P
+				.model flat
+
+				extern _GetStdHandle@4: near
+				extern _WriteConsoleA@20: near
+				extern _ExitProcess@4: near
+
+ 00000000			.data												; all memory 
+
+				; make an array
+
+ 00000000 61			alphabet		byte	61h							; 61h is hex code for a
+ 00000001 00000000		outputHandle	dword	?							; initializes to nothing
+ 00000005 00000000		written			dword	?
+
+ 00000000			.code												; code to increment pointer
+
+ 00000000			main PROC near
+ 00000000			_main:
+
+					; handle = GetStdHandle(-11)
+ 00000000  6A F5			push	-11										; pass an argument onto the stack. push -11 bc -11 stands for standard output
+ 00000002  E8 00000000 E		call	_GetStdHandle@4							; call to standard handle
+ 00000007  A3 00000001 R		mov		outputHandle, eax						; write eax to output handle in memory
+																	
+
+ 0000000C  BA 00000005 R		mov		edx, offset written						; save offset written's address in edx
+ 00000011  BB 00000000 R		mov		ebx, offset alphabet					; need offset alphabet below so we save it in ebx					
+
+ 00000016  BE 0000001A			mov		esi, 26									; sets up index, alphabet has 26 letters, count down from esi 26 in loop
+					
+ 0000001B			_loop: 
+					; how to make a simple function call
+ 0000001B  56				push esi
+ 0000001C  50				push eax
+ 0000001D  57				push edi
+ 0000001E  6A 01			push 1
+ 00000020  53				push ebx
+ 00000021  E8 00000016			call writeLine
+ 00000026  5F				pop edi
+ 00000027  58				pop eax
+ 00000028  5E				pop esi
+
+					
+				;	; WriteConsole(handle, &msg[0], numCharsToWrite, &written, 0)
+				;	push	0
+				;	push	edx										; push address of written (written is a buffer in edx)
+				;	push	1										; how many characters to write at a time
+				;	push	ebx										; this is the message buffer, the offset of alphabet which is saved in ebx)
+				;	push	outputHandle							; handle stored in outputHandle
+				;	call	_WriteConsoleA@20						; all needed arguments have been pushed to stack so call this
+					
+ 00000029  80 05 00000000 R		add		alphabet, 1
+	   01
+ 00000030  83 C6 FF			add		esi, -1									; decrement iterator. this add will set the 0 flag
+ 00000033  75 E6			jnz		_loop									; has no condition associated with it, checking 0 flag in e flag's register
+
+ 00000035			_exit:
+
+ 00000035  6A 00			push	0
+ 00000037  E8 00000000 E		call	_ExitProcess@4
+
+ 0000003C			main ENDP
+
+ 0000003C			writeLine PROC near
+ 0000003C			_writeLine:			
+
+ 0000003C  5E				pop		esi
+ 0000003D  5F				pop		edi				;where alphabet resides
+ 0000003E  58				pop		eax
+
+					; WriteConsole(handle, &msg[0], numCharsToWrite, &written, 0)
+ 0000003F  6A 00			push	0
+ 00000041  68 00000005 R		push	offset written										
+ 00000046  50				push	eax									; get value by popping off of stack								
+ 00000047  57				push	edi									
+ 00000048  FF 35 00000001 R		push	outputHandle							
+ 0000004E  E8 00000000 E		call	_WriteConsoleA@20
+
+ 00000053  56				push	esi
+ 00000054  C3				ret		;8									;return instruction, 8 bytes
+					
+ 00000055			writeLine ENDP
+
+				END
+Microsoft (R) Macro Assembler Version 14.26.28806.0	    11/01/21 19:25:10
+main.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000009 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000055 Para	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000003C Public
+  _main  . . . . . . . . . . . .	L Near	 00000000 _TEXT	
+  _loop  . . . . . . . . . . . .	L Near	 0000001B _TEXT	
+  _exit  . . . . . . . . . . . .	L Near	 00000035 _TEXT	
+writeLine  . . . . . . . . . . .	P Near	 0000003C _TEXT	Length= 00000019 Public
+  _writeLine . . . . . . . . . .	L Near	 0000003C _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000000h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+_ExitProcess@4 . . . . . . . . .	L Near	 00000000 FLAT	External
+_GetStdHandle@4  . . . . . . . .	L Near	 00000000 FLAT	External
+_WriteConsoleA@20  . . . . . . .	L Near	 00000000 FLAT	External
+alphabet . . . . . . . . . . . .	Byte	 00000000 _DATA	
+outputHandle . . . . . . . . . .	DWord	 00000001 _DATA	
+written  . . . . . . . . . . . .	DWord	 00000005 _DATA	
+
+	   0 Warnings
+	   0 Errors
