@@ -1,11 +1,40 @@
 .386P
+
 .model flat
+
 extern _ExitProcess@4: near
+extern _GetStdHandle@4: near
+extern _WriteConsoleA@20: near
+extern _ReadConsoleA@20: near
+
 .data
+
+n			dword		5
+prev		byte		1
+current		byte		1
+next		byte		0
+msg			byte		"Enter which number in the sequence you want to see: "
+
 .code
+
 main PROC near
 _main:
+
+mov		eax,	prev				; prev = 0
+mov		efx,	current				; current = 1
+mov		edx,	next				; next = 0
+mov		ecx,	n
+
+loop:
+
+add ebx, edx							; prev + curr
+mov eax, ebx							; next = prev + curr
+mov ebx, edx							; update prev with curr
+mov edx, eax							; update curr with next
+Loop loop
+
 	push 0
-	call	_ExitProcess@4
+	call _ExitProcess@4
+
 main ENDP
 END
