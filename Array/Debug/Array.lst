@@ -1,0 +1,121 @@
+Microsoft (R) Macro Assembler Version 14.26.28806.0	    11/01/21 17:55:03
+array.asm						     Page 1 - 1
+
+
+				.386P
+
+				.model flat
+
+				extern _GetStdHandle@4: near
+				extern _WriteConsole@20: near
+				extern _ExitProcess@4: near
+
+ 00000000			.data											; all memory 
+
+				;make an array
+
+ 00000000 61			alphabet		byte	61h						;61h is hex code for a
+ 00000001 00000000		outputHandle	dword	?						; initializes to nothing
+ 00000005 00000000		written			dword	?
+
+ 00000000			.code													; code to increment pointer
+
+ 00000000			main PROC near
+ 00000000			_main:
+
+					; this code 
+
+					; handle = GetStdHandle(-11)
+ 00000000  6A F5			push	-11										;pass an argument onto the stack. push -11 bc -11 stands for standard output
+ 00000002  E8 00000000 E		call	_GetStdHandle@4							; call to standard handle
+ 00000007  A3 00000001 R		mov		outputHandle, eax						; write eax to output handle in memory
+																	
+
+ 0000000C  BA 00000005 R		mov		edx, offset written						; save offset written's address in edx
+ 00000011  BB 00000000 R		mov		ebx, offset alphabet					; need it below so we save it in ebx					
+
+ 00000016  BE 00000000			mov		esi, 0
+
+				;_loop:																		;count up loop
+				;
+				;	cmp		esi, 4
+				;	jz		_exit
+				;	mov		eax, ebx
+				;	add		eax, esi														; esi is index
+				;	add		esi, 1
+				;
+				;	; WriteConsole(handle, &msg[0], numCharsToWrite, &written, 0)			;executed in reverse order
+				;	push	0
+ 0000001B  68 00000005 R		push	offset written													; & means pointer * means whatever this pointer points to
+																							; offset gets address of where thing is
+																							; couldve pushed ebx bc it was already assigned
+ 00000020  6A 01			push	1
+ 00000022  50				push	eax																
+ 00000023  FF 35 00000001 R		push	outputHandle													
+ 00000029  E8 00000000 E		call	_WriteConsole@20
+ 0000002E  EB 00			jmp		_loop
+
+ 00000030			_loop: 
+					
+					; WriteConsole(handle, &msg[0], numCharsToWrite, &written, 0)
+ 00000030  6A 00			push	0
+ 00000032  52				push	edx
+ 00000033  6A 01			push	1
+ 00000035  53				push	ebx
+ 00000036  FF 35 00000001 R		push	outputHandle
+ 0000003C  E8 00000000 E		call	_WriteConsole@20
+
+ 00000041			_exit:
+
+ 00000041  6A 00			push	0
+ 00000043  E8 00000000 E		call	_ExitProcess@4
+
+ 00000048			main ENDP
+				END
+Microsoft (R) Macro Assembler Version 14.26.28806.0	    11/01/21 17:55:03
+array.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000009 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000048 Para	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000048 Public
+  _main  . . . . . . . . . . . .	L Near	 00000000 _TEXT	
+  _loop  . . . . . . . . . . . .	L Near	 00000030 _TEXT	
+  _exit  . . . . . . . . . . . .	L Near	 00000041 _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000000h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+_ExitProcess@4 . . . . . . . . .	L Near	 00000000 FLAT	External
+_GetStdHandle@4  . . . . . . . .	L Near	 00000000 FLAT	External
+_WriteConsole@20 . . . . . . . .	L Near	 00000000 FLAT	External
+alphabet . . . . . . . . . . . .	Byte	 00000000 _DATA	
+outputHandle . . . . . . . . . .	DWord	 00000001 _DATA	
+written  . . . . . . . . . . . .	DWord	 00000005 _DATA	
+
+	   0 Warnings
+	   0 Errors

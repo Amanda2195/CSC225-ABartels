@@ -27,7 +27,8 @@ _main:
 	mov		num4,		ecx
 	
 	xchg	edx,		ebx
-	;move back to memory
+	mov		num2,		edx
+	mov		num3,		ebx
 
 	push		0
 	call		_ExitProcess@4
