@@ -27,6 +27,8 @@ _main:
 	mov		num4,		ecx
 	
 	xchg	edx,		ebx
+	mov		num2,		edx
+	mov		num3,		ebx		
 	;move back to memory
 
 	push		0
