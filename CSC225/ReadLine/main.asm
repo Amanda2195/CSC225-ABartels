@@ -11,8 +11,8 @@ extern _ReadConsoleA@20: near
 
 .data
 
-input1	dword	?
-input2	dword	?
+input1	dword	0
+input2	dword	0
 
 prompt	byte	'Enter number 1: ', 10
 prompt2	byte	'Enter number 2: ', 10
@@ -97,9 +97,9 @@ _atoi:
 
 	push	ebp
 	mov		ebp,	esp
-	mov		ebx,	[ebp+16]
+	mov		ebx,	[ebp+12]
+	mov		ecx,	ebx
 
-	;mov	ebx,	offset readBuffer1			; moving address of offset readBuffer into ebx
 
 _endOfStringLoop:
 
@@ -114,10 +114,10 @@ _endOfStringLoop:
 	mov		eax, 0
 	mov		ebx, 0
 	mov		edx, 0
-	mov     ecx, offset readBuffer1
+	mov		accumulator, 0
 
 _convertLoop:
-	mov		bl, [edi]
+	mov		bl, [edi]															;exception thrown at 0x007710D5		;change to ebx
 	sub		bl,	30h	
 	mov		eax, ebx
 	mul		esi
@@ -132,7 +132,8 @@ _convertLoop:
 	jge     _convertLoop
 
 	mov		eax, accumulator
-	mov		[ebp+8],	eax
+	mov		edx, [ebp+8]
+	mov		[edx], eax
 	pop		ebp
 	ret		8
 	
@@ -147,7 +148,11 @@ itoa PROC near								; takes value from multiplication
 	mov		eax,	[ebp+12]				;integer value that you will convert is stored here
 	add		ebx,	1024
 
+	mov		edi, 10
+	sub		ebx, 1
+	mov		[ebx], edi
 	mov		edi,	10
+
 
 _divisionLoop:
 	
@@ -179,10 +184,13 @@ _main:
 
 	push	offset	readBuffer2
 	call	readLine
+
+	mov		eax, offset input1
 	push	offset readBuffer1
 	push	offset input1
 	call	atoi
 
+	mov		eax, offset input2
 	push	offset readBuffer2
 	push	offset input2
 	call	atoi

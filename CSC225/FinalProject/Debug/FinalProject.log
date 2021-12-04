@@ -1,0 +1,6 @@
+﻿  Assembling atoi.asm...
+atoi.asm(35): error A2006: undefined symbol : accumulator
+atoi.asm(42): error A2006: undefined symbol : accumulator
+atoi.asm(44): error A2006: undefined symbol : accumulator
+atoi.asm(52): error A2006: undefined symbol : accumulator
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\BuildCustomizations\masm.targets(70,5): error MSB3721: The command "ml.exe /c /nologo /Zi /Fo"Debug\atoi.obj" /Fl"Debug\FinalProject.lst" /W3 /errorReport:prompt  /Taatoi.asm" exited with code 1.
