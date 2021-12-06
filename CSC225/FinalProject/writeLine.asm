@@ -7,6 +7,10 @@ extern _WriteConsoleA@20: near
 extern _ReadConsoleA@20: near
 
 .DATA
+
+handle		dword       ?
+written		dword		?
+
 .CODE
 
 writeLine PROC near

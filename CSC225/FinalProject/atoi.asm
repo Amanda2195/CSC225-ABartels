@@ -15,6 +15,7 @@ _atoi:
 
 	push	ebp
 	mov		ebp,	esp
+	add		esp,	4
 	mov		ebx,	[ebp+12]
 	mov		ecx,	ebx
 
@@ -32,16 +33,16 @@ _endOfStringLoop:
 	mov		eax, 0
 	mov		ebx, 0
 	mov		edx, 0
-	mov		accumulator, 0
+	mov		[ebp], eax
 
 _convertLoop:
 	mov		bl, [edi]															;exception thrown at 0x007710D5		;change to ebx
 	sub		bl,	30h	
 	mov		eax, ebx
 	mul		esi
-	mov     edx, accumulator
+	mov     edx, [ebp]
 	add		edx, eax
-	mov     accumulator, edx
+	mov     [ebp], edx
 	mov		eax, 10
 	mul		esi 				;destination is eax
 	mov		esi, eax
@@ -49,9 +50,10 @@ _convertLoop:
 	cmp     edi, ecx
 	jge     _convertLoop
 
-	mov		eax, accumulator
+	mov		eax, [ebp]
 	mov		edx, [ebp+8]
 	mov		[edx], eax
+	mov		esp,	ebp
 	pop		ebp
 	ret		8
 	

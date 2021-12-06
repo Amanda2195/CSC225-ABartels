@@ -6,10 +6,10 @@ extern _GetStdHandle@4: near
 extern _WriteConsoleA@20: near
 extern _ReadConsoleA@20: near
 
-extern _PrintLine
-extern _WriteLine
-extern _atoi
-extern _itoa
+extern readLine: near
+extern writeLine: near
+extern atoi: near
+extern itoa: near
 
 .data
 
@@ -22,15 +22,7 @@ result	byte	'The multiplication result is: ', 10
 writeBuffer	byte	1024	DUP(00H)
 
 readBuffer1	byte		1024	DUP(00H)
-readBuffer2	byte		1024	DUP(00H)
-
-handle		dword       ?
-read		dword		?
-written		dword		?
-
-readHandle	dword		?	
-
-accumulator  dword      0
+readBuffer2	byte		1024	DUP(00H)	
 
 .code
 main PROC near

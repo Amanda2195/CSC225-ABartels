@@ -7,6 +7,10 @@ extern _WriteConsoleA@20: near
 extern _ReadConsoleA@20: near
 
 .DATA
+
+	readHandle	dword		?
+	read		dword		?
+
 .CODE
 
 readLine PROC near
@@ -26,7 +30,7 @@ readLine PROC near
 	push	0							; reserved argument, always needed
 	push	offset read					; reads the number of bytes it wrote, pass a memory address to this
 	push	1024							; the number of bytes youre asking it to read
-	push	edx			; address of where the message is
+	push	edx							; address of where the message is
 	push	readHandle					; handle of the output from GetStdHandle *changed from read. readHandle is the memory location written to
 	call	_ReadConsoleA@20			; call function
 	pop		ebp
