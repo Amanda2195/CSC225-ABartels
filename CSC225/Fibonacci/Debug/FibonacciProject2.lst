@@ -1,0 +1,114 @@
+Microsoft (R) Macro Assembler Version 14.29.30136.0	    12/06/21 16:07:05
+main.asm						     Page 1 - 1
+
+
+				.386P
+				;FIBONACCI PROJECT 1, uses jmp loop
+
+				.model flat
+
+				extern _ExitProcess@4: near
+				extern _GetStdHandle@4: near
+				extern _WriteConsoleA@20: near
+				extern _ReadConsoleA@20: near
+
+ 00000000			.data
+
+ 00000000 00000001		prev		dword		1		;*
+ 00000004 00000001		current		dword		1		;*
+ 00000008 00000000		next		dword		0		;*
+
+ 0000000C 45 6E 74 65 72	msg			byte		"Enter which number in the sequence you want to see: "
+	   20 77 68 69 63
+	   68 20 6E 75 6D
+	   62 65 72 20 69
+	   6E 20 74 68 65
+	   20 73 65 71 75
+	   65 6E 63 65 20
+	   79 6F 75 20 77
+	   61 6E 74 20 74
+	   6F 20 73 65 65
+	   3A 20
+
+ 00000000			.code
+
+ 00000000			main PROC near
+ 00000000			_main:
+
+				;expect to find n in eax when you start the program, at end result should be in eax
+
+ 00000000  B8 00000005		mov		eax,	5					;prev = 0		;*
+ 00000005  8B 1D 00000000 R	mov		ebx,	prev								;*
+ 0000000B  8B 0D 00000004 R	mov		ecx,	current				; current = 1	;*
+ 00000011  8B 15 00000008 R	mov		edx,	next				; next = 0		;*
+									
+				;mov		ebx							;for user input
+
+ 00000017  B9 00000001		mov		ecx,	1									;*
+
+ 0000001C			_loop:
+
+ 0000001C  3B C8		cmp	ecx, eax							;*
+				jge	exit								;*
+main.asm(38) : error A2006:undefined symbol : exit
+ 0000001E  03 D9		add ebx, ecx							; prev + curr
+ 00000020  8B D3		mov edx, ebx							; next = prev + curr			;*not eax
+ 00000022  8B D9		mov ebx, ecx							; update prev with curr
+ 00000024  8B F2		mov esi, edx							; update curr with next
+ 00000026  41			inc	ecx									;*
+ 00000027  EB F3		jmp _loop
+				;Loop _loop
+
+ 00000029  6A 00			push 0
+ 0000002B  E8 00000000 E		call _ExitProcess@4
+
+ 00000030			main ENDP
+				END
+Microsoft (R) Macro Assembler Version 14.29.30136.0	    12/06/21 16:07:05
+main.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000040 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000039 Para	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000039 Public
+  _main  . . . . . . . . . . . .	L Near	 00000000 _TEXT	
+  _loop  . . . . . . . . . . . .	L Near	 0000001C _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000000h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+_ExitProcess@4 . . . . . . . . .	L Near	 00000000 FLAT	External
+_GetStdHandle@4  . . . . . . . .	L Near	 00000000 FLAT	External
+_ReadConsoleA@20 . . . . . . . .	L Near	 00000000 FLAT	External
+_WriteConsoleA@20  . . . . . . .	L Near	 00000000 FLAT	External
+current  . . . . . . . . . . . .	DWord	 00000004 _DATA	
+msg  . . . . . . . . . . . . . .	Byte	 0000000C _DATA	
+next . . . . . . . . . . . . . .	DWord	 00000008 _DATA	
+prev . . . . . . . . . . . . . .	DWord	 00000000 _DATA	
+
+	   0 Warnings
+	   1 Errors

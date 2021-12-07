@@ -1,6 +1,5 @@
 .386P
-;FIBONACCI PROJECT 2, use LOOP loop
-
+;EXCHANGE PROJECT 1
 .model flat
 
 extern _ExitProcess@4: near
@@ -23,44 +22,31 @@ _main:
 
 ;expect to find n in eax when you start the program, at end result should be in eax
 
-mov		eax,	6					;prev = 0		;*
+mov		eax,	5					;prev = 0		;*
 mov		ebx,	prev								;*
-mov		edi,	current				; current = 1	;*
+mov		ecx,	current				; current = 1	;*
 mov		edx,	next				; next = 0		;*
 					
 ;mov		ebx							;for user input
 
-mov	esi,	3									;*
-cmp	eax,	2
-je	_exit2
-cmp	eax,	1
-je	_exit2
-cmp	eax, 0
-je	_exit0
-
-sub		eax,	3
-mov		ecx,	eax
+mov		ecx,	1									;*
 
 _loop:
 
-add ebx, edi							; prev + curr
+cmp	ecx, eax							;*
+jge	exit								;*
+add ebx, ecx							; prev + curr
 mov edx, ebx							; next = prev + curr			;*not eax
-mov ebx, edi							; update prev with curr
-mov edi, edx							; update curr with next
-;inc	esi									;*
-LOOP _loop
+mov ebx, ecx							; update prev with curr
+mov esi, edx							; update curr with next
+inc	ecx									;*
+jmp _loop
 ;Loop _loop
 
 _exit:
-mov eax, edx
+
 	push 0
 	call _ExitProcess@4
-_exit0:
-mov	edx,	0
-jmp	_exit
-_exit2:
-mov	edx,	1
-jmp	_exit
 
 main ENDP
 END

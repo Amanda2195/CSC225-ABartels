@@ -1,5 +1,5 @@
 .386P
-;FIBONACCI PROJECT 2, use LOOP loop
+;FIBONACCI PROJECT 1, use LOOP loop
 
 .model flat
 
@@ -23,9 +23,9 @@ _main:
 
 ;expect to find n in eax when you start the program, at end result should be in eax
 
-mov		eax,	6					;prev = 0		;*
+mov		eax,	2					;prev = 0		;*
 mov		ebx,	prev								;*
-mov		edi,	current				; current = 1	;*
+mov		ecx,	current				; current = 1	;*
 mov		edx,	next				; next = 0		;*
 					
 ;mov		ebx							;for user input
@@ -38,17 +38,16 @@ je	_exit2
 cmp	eax, 0
 je	_exit0
 
-sub		eax,	3
-mov		ecx,	eax
-
 _loop:
 
-add ebx, edi							; prev + curr
+cmp	esi, eax							;*
+jg	_exit								;*
+add ebx, ecx							; prev + curr
 mov edx, ebx							; next = prev + curr			;*not eax
-mov ebx, edi							; update prev with curr
-mov edi, edx							; update curr with next
-;inc	esi									;*
-LOOP _loop
+mov ebx, ecx							; update prev with curr
+mov ecx, edx							; update curr with next
+inc	esi									;*
+jmp _loop
 ;Loop _loop
 
 _exit:
